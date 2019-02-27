@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private  DrawerLayout mDrawer;
     private ActionBarDrawerToggle drawerToggle;
-
+    private NavigationView nvDrawer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +39,16 @@ public class MainActivity extends AppCompatActivity {
 
         // Tie DrawerLayout events to the ActionBarToggle
         mDrawer.addDrawerListener(drawerToggle);
+
+        nvDrawer = (NavigationView) findViewById(R.id.nView);
+        // Setup drawer view
+        setupDrawerContent(nvDrawer);
+
+        nvDrawer.getMenu().getItem(0).setChecked(true);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, new SouthParkFragment()).commit();
+        setTitle(R.string.south_park);
+
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -71,9 +81,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             default:
-                fragmentClass = FamilyGuyFragment.class;
+                fragmentClass = SouthParkFragment.class;
         }
-
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
@@ -90,9 +99,9 @@ public class MainActivity extends AppCompatActivity {
         setTitle(menuItem.getTitle());
         // Close the navigation drawer
         mDrawer.closeDrawers();
-    }
+        menuItem.setChecked(false);
 
-    // ...
+    }
 
     private ActionBarDrawerToggle setupDrawerToggle() {
         // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it
